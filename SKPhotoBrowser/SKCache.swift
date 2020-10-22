@@ -54,7 +54,11 @@ open class SKCache {
         }
         
         if let response = cache.cachedResponseForRequest(request) {
-            return UIImage(data: response.data)
+            if request.url?.absoluteString.lowercased().hasSuffix(".gif") == true {
+                return UIImage.gif(data: response.data)
+            }else {
+                return UIImage(data: response.data)
+            }
         }
         return nil
     }

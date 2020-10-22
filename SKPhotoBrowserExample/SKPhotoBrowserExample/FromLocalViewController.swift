@@ -18,11 +18,16 @@ class FromLocalViewController: UIViewController, UICollectionViewDataSource, UIC
         super.viewDidLoad()
 
         // Static setup
-        SKPhotoBrowserOptions.displayAction = true
-        SKPhotoBrowserOptions.displayStatusbar = true
+        SKPhotoBrowserOptions.displayAction = false
+        SKPhotoBrowserOptions.displayStatusbar = false
+        SKPhotoBrowserOptions.displayDownloadAction = true
+        SKPhotoBrowserOptions.displayDownloadImage = UIImage(named: "download")
         SKPhotoBrowserOptions.displayCounterLabel = true
-        SKPhotoBrowserOptions.displayBackAndForwardButton = true
-
+        SKPhotoBrowserOptions.displayBackAndForwardButton = false
+        SKPhotoBrowserOptions.longPhotoWidthMatchScreen = true //长图查看
+        SKPhotoBrowserOptions.enableSingleTapDismiss = true
+        
+        
         setupTestData()
         setupCollectionView()
     }
@@ -123,9 +128,10 @@ private extension FromLocalViewController {
     }
     
     func createLocalPhotos() -> [SKPhotoProtocol] {
-        return (0..<10).map { (i: Int) -> SKPhotoProtocol in
-            let photo = SKPhoto.photoWithImage(UIImage(named: "image\(i%10).jpg")!)
-            photo.caption = caption[i%10]
+        let count = 14
+        return (0..<count).map { (i: Int) -> SKPhotoProtocol in
+            let photo = SKPhoto.photoWithImage(UIImage(named: "image\(i%count).jpg")!)
+//            photo.caption = caption[i%count]
             return photo
         }
     }
