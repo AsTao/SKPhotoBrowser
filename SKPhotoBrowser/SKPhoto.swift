@@ -83,7 +83,15 @@ open class SKPhoto: NSObject, SKPhotoProtocol {
                     return
                 }
 
-                if let data = data, let response = response, let image = self.photoURL.lowercased().contains(".gif") == true ? UIImage.gif(data: data) : UIImage(data: data) {
+                if let data = data, let response = response {
+                    var image :UIImage!
+                    if let gif = UIImage.gif(data: data){
+                        image = gif
+                    }else if let img = UIImage(data: data) {
+                        image = img
+                    }else{
+                        image = UIImage()
+                    }
                     if self.shouldCachePhotoURLImage {
                         if SKCache.sharedCache.imageCache is SKRequestResponseCacheable {
                             SKCache.sharedCache.setImageData(data, response: response, request: task?.originalRequest)
