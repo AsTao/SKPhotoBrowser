@@ -17,6 +17,8 @@ open class SKPhotoBrowser: UIViewController {
     open var initPageIndex: Int = 0
     open var activityItemProvider: UIActivityItemProvider?
     open var photos: [SKPhotoProtocol] = []
+   
+    
     public var downloadActionClosure :((_ photo :UIImage) -> Void)?
     public var customActionClosure :(() -> Void)?
     internal lazy var pagingScrollView: SKPagingScrollView = SKPagingScrollView(frame: self.view.frame, browser: self)
@@ -28,6 +30,7 @@ open class SKPhotoBrowser: UIViewController {
     
     // child component
     fileprivate var actionView: SKActionView!
+    fileprivate var customViews: [UIView]?
     fileprivate(set) var paginationView: SKPaginationView!
     var toolbar: SKToolbar!
 
@@ -67,8 +70,8 @@ open class SKPhotoBrowser: UIViewController {
         setup()
     }
     
-    public convenience init(photos: [SKPhotoProtocol]) {
-        self.init(photos: photos, initialPageIndex: 0)
+    public convenience init(photos: [SKPhotoProtocol], customViews:[UIView]? = nil) {
+        self.init(photos: photos, initialPageIndex: 0, customViews: customViews)
     }
     
     @available(*, deprecated)
@@ -80,12 +83,13 @@ open class SKPhotoBrowser: UIViewController {
         animator.senderViewForAnimation = animatedFromView
     }
     
-    public convenience init(photos: [SKPhotoProtocol], initialPageIndex: Int) {
+    public convenience init(photos: [SKPhotoProtocol], initialPageIndex: Int, customViews: [UIView]? = nil) {
         self.init(nibName: nil, bundle: nil)
         self.photos = photos
         self.photos.forEach { $0.checkCache() }
         self.currentPageIndex = min(initialPageIndex, photos.count - 1)
         self.initPageIndex = self.currentPageIndex
+        self.customViews = customViews
         animator.senderOriginImage = photos[currentPageIndex].underlyingImage
         animator.senderViewForAnimation = photos[currentPageIndex] as? UIView
     }
@@ -578,7 +582,7 @@ private extension SKPhotoBrowser {
     }
     
     func configureActionView() {
-        actionView = SKActionView(frame: view.frame, browser: self)
+        actionView = SKActionView(frame: view.frame, browser: self, customViews: customViews)
         view.addSubview(actionView)
     }
 
