@@ -31,7 +31,7 @@ class SKActionView: UIView {
 
         configureCloseButton()
         configureDeleteButton()
-        configureCoustomView(SKPhotoBrowserOptions.customView)
+        configureCustomView(SKPhotoBrowserOptions.customView)
     }
     
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
@@ -125,7 +125,7 @@ extension SKActionView {
         }
     }
     
-    func configureCoustomView(_ view: UIView? = nil) {
+    func configureCustomView(_ view: UIView? = nil) {
         if let view = view {
             addSubview(view)
             self.customView = view
