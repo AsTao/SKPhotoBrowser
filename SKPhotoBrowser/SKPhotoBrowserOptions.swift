@@ -52,10 +52,6 @@ public struct SKPhotoBrowserOptions {
     /// Default: false
     public static var longPhotoWidthMatchScreen: Bool = false
     
-    /// provide a custom view on the SKActionView
-    /// Default : nil
-    public static var customView: UIView?
-    
     /// Provide custom session configuration (eg. for headers, etc.)
     public static var sessionConfiguration: URLSessionConfiguration = .default
 }

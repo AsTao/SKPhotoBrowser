@@ -13,7 +13,7 @@ class SKActionView: UIView {
     internal var closeButton: SKCloseButton!
     internal var deleteButton: SKDeleteButton!
     
-    internal var customView: UIView?
+    internal var customViews: [UIView]?
     // Action
     fileprivate var cancelTitle = "Cancel"
     
@@ -25,21 +25,26 @@ class SKActionView: UIView {
         super.init(frame: frame)
     }
     
-    convenience init(frame: CGRect, browser: SKPhotoBrowser) {
+    convenience init(frame: CGRect, browser: SKPhotoBrowser, customViews: [UIView]? = nil) {
         self.init(frame: frame)
         self.browser = browser
 
         configureCloseButton()
         configureDeleteButton()
-        configureCustomView(SKPhotoBrowserOptions.customView)
+        configureCustomViews(customViews)
     }
     
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         if let view = super.hitTest(point, with: event) {
             if closeButton.frame.contains(point) || deleteButton.frame.contains(point) {
                 return view
-            }else if let customView = customView, customView.frame.contains(point) {
-                return view
+            }else if let customViews = customViews {
+                for hitView in customViews {
+                    if hitView.frame.contains(point) {
+                        return view
+                    }
+                }
+                return nil
             }
             return nil
         }
@@ -125,14 +130,12 @@ extension SKActionView {
         }
     }
     
-    func configureCustomView(_ view: UIView? = nil) {
-        if let view = view {
-            addSubview(view)
-            self.customView = view
-        }else {
-            self.customView?.removeFromSuperview()
-            self.customView = view
-            return
+    func configureCustomViews(_ views: [UIView]? = nil) {
+        if let views = views {
+            for view in views {
+                addSubview(view)
+            }
+            self.customViews = views
         }
     }
 }
