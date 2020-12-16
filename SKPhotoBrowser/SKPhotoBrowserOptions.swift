@@ -51,7 +51,11 @@ public struct SKPhotoBrowserOptions {
     /// and the minScale is 1.0, the maxScale is 2.5
     /// Default: false
     public static var longPhotoWidthMatchScreen: Bool = false
-
+    
+    /// provide a custom view on the SKActionView
+    /// Default : nil
+    public static var customView: UIView?
+    
     /// Provide custom session configuration (eg. for headers, etc.)
     public static var sessionConfiguration: URLSessionConfiguration = .default
 }

@@ -13,6 +13,7 @@ class SKActionView: UIView {
     internal var closeButton: SKCloseButton!
     internal var deleteButton: SKDeleteButton!
     
+    internal var customView: UIView?
     // Action
     fileprivate var cancelTitle = "Cancel"
     
@@ -30,11 +31,14 @@ class SKActionView: UIView {
 
         configureCloseButton()
         configureDeleteButton()
+        configureCoustomView(SKPhotoBrowserOptions.customView)
     }
     
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         if let view = super.hitTest(point, with: event) {
             if closeButton.frame.contains(point) || deleteButton.frame.contains(point) {
+                return view
+            }else if let customView = customView, customView.frame.contains(point) {
                 return view
             }
             return nil
@@ -118,6 +122,17 @@ extension SKActionView {
         
         if let image = image {
             deleteButton.setImage(image, for: .normal)
+        }
+    }
+    
+    func configureCoustomView(_ view: UIView? = nil) {
+        if let view = view {
+            addSubview(view)
+            self.customView = view
+        }else {
+            self.customView?.removeFromSuperview()
+            self.customView = view
+            return
         }
     }
 }
