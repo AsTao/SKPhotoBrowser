@@ -8,6 +8,7 @@
 
 import UIKit
 
+private let bundle = Bundle(for: SKPhotoBrowser.self)
 
 @objc public protocol SKPhotoProtocol: NSObjectProtocol {
     var index: Int { get set }
@@ -90,6 +91,8 @@ open class SKPhoto: NSObject, SKPhotoProtocol {
                         image = gif
                     }else if let img = UIImage(data: data) {
                         image = img
+                    }else{
+                        image = UIImage(named: "SKPhotoBrowser.bundle/images/btn_common_fail_wh", in: bundle, compatibleWith: nil)
                     }
                     if let img = image {
                         if self.shouldCachePhotoURLImage {
