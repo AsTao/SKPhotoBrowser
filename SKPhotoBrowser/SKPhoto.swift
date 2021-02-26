@@ -8,6 +8,7 @@
 
 import UIKit
 
+
 @objc public protocol SKPhotoProtocol: NSObjectProtocol {
     var index: Int { get set }
     var underlyingImage: UIImage! { get }
@@ -84,27 +85,26 @@ open class SKPhoto: NSObject, SKPhotoProtocol {
                 }
 
                 if let data = data, let response = response {
-                    var image :UIImage!
+                    var image :UIImage?
                     if let gif = UIImage.gif(data: data){
                         image = gif
                     }else if let img = UIImage(data: data) {
                         image = img
-                    }else{
-                        image = UIImage()
                     }
-                    if self.shouldCachePhotoURLImage {
-                        if SKCache.sharedCache.imageCache is SKRequestResponseCacheable {
-                            SKCache.sharedCache.setImageData(data, response: response, request: task?.originalRequest)
-                        } else {
-                            SKCache.sharedCache.setImage(image, forKey: self.photoURL)
+                    if let img = image {
+                        if self.shouldCachePhotoURLImage {
+                            if SKCache.sharedCache.imageCache is SKRequestResponseCacheable {
+                                SKCache.sharedCache.setImageData(data, response: response, request: task?.originalRequest)
+                            } else {
+                                SKCache.sharedCache.setImage(img, forKey: self.photoURL)
+                            }
+                        }
+                        DispatchQueue.main.async {
+                            self.underlyingImage = img
+                            self.loadUnderlyingImageComplete()
                         }
                     }
-                    DispatchQueue.main.async {
-                        self.underlyingImage = image
-                        self.loadUnderlyingImageComplete()
-                    }
                 }
-                
             })
             task?.resume()
     }
